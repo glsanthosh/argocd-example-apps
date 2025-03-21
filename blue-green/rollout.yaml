@@ -33,7 +33,7 @@ spec:
       # stack as soon as the ReplicaSet are completely ready/available.
       # Rollouts can be resumed using: `kubectl argo rollouts promote ROLLOUT`
       autoPromotionEnabled: false
-      autoPromotionSeconds: 300
+      #autoPromotionSeconds: 300
 kind: Service
 apiVersion: v1
 metadata:
