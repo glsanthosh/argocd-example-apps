@@ -1,0 +1,87 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: rollouts-demo
+spec:
+  replicas: 5
+  strategy:
+    canary:
+      steps:
+      - setWeight: 20
+      - pause: { }
+      - analysis:
+          templates:
+          - templateName: canary-check
+      - setWeight: 40
+      - pause: { }
+      - setWeight: 60
+      - pause: { }
+      - setWeight: 80
+      - pause: { }
+  revisionHistoryLimit: 2
+  selector:
+    matchLabels:
+      app: rollouts-demo
+  template:
+    metadata:
+      labels:
+        app: rollouts-demo
+    spec:
+      containers:
+      - name: rollouts-demo
+        image: argoproj/rollouts-demo:yellow
+        ports:
+        - name: http
+          containerPort: 8080
+          protocol: TCP
+        resources:
+          requests:
+            memory: 32Mi
+            cpu: 5m
+
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rollouts-demo
+spec:
+  ports:
+  - port: 80
+    targetPort: http
+    protocol: TCP
+    name: http
+  selector:
+    app: rollouts-demo
+
+
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: rollouts-demo-hpa
+spec:
+  scaleTargetRef:
+    apiVersion: argoproj.io/v1alpha1
+    kind: Rollout
+    name: rollouts-demo
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 10
+
+kind: AnalysisTemplate
+apiVersion: argoproj.io/v1alpha1
+metadata:
+  name: canary-check
+spec:
+  metrics:
+  - name: test
+    provider:
+      job:
+        spec:
+          backoffLimit: 1
+          template:
+            spec:
+              containers:
+              - name: busybox
+                image: busybox
+                args: ["echo", "pass"]  #--> for making analysis fail, uncomment
+              restartPolicy: Never
