@@ -12,7 +12,7 @@ spec:
     path: ignorediff
     repoURL: 'https://github.com/glsanthosh/argocd-example-apps.git'
     targetRevision: HEAD
-  ignoreDifferences: |
+  ignoreDifferences: 
     - kind: ConfigMap
       name: demo-configmap
     #  jsonPointers:
