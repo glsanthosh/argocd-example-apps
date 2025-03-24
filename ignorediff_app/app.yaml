@@ -15,8 +15,8 @@ spec:
   ignoreDifferences:
     - kind: ConfigMap
       name: demo-configmap
-      jsonPointers:
-        - /data/key1
+    #  jsonPointers:
+    #    - /data/key1
   sources: []
   project: default
   syncPolicy:
