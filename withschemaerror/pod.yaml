@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Pod
 metadata:
-  name: demo-pod
+  name: sandemo-pod
   annotations:
     argocd.argoproj.io/sync-options: Validate=true
 spec:
