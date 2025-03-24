@@ -4,14 +4,16 @@ metadata:
   name: example-deployment
   namespace: argocdappdemo
 spec:
-  replicas: 3
+  replicas: 5
   selector:
     matchLabels:
       app: example
+      name: myname
   template:
     metadata:
       labels:
         app: example
+        name: myname
     spec:
       containers:
       - name: nginx
