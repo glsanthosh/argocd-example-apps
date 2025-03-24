@@ -1,0 +1,27 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: sync-options-retry
+  namespace: argocd
+spec:
+  destination:
+    name: ''
+    namespace: argocdappdemo-retry  
+    server: 'https://kubernetes.default.svc'
+  source:
+    path: with_sync_retry
+    repoURL: 'https://github.com/glsanthosh/argocd-example-apps.git'
+    targetRevision: HEAD
+  sources: []
+  project: default
+  syncPolicy:
+    syncOptions:
+      - CreateNamespace=true
+    retry:
+      backoffLimit: 3
+      retryDuration: "15m"
+      backoff:
+        factor: 2
+        minInterval: "10s"
+        maxInterval: "2m"
+    
