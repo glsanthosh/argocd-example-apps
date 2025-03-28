@@ -2,6 +2,9 @@ apiVersion: argoproj.io/v1alpha1
 kind: Rollout
 metadata:
   name: rollouts-demo
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "1"
 spec:
   replicas: 5
   strategy:
@@ -44,6 +47,9 @@ apiVersion: v1
 kind: Service
 metadata:
   name: rollouts-demo
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "2"
 spec:
   ports:
   - port: 80
@@ -58,6 +64,9 @@ apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
   name: rollouts-demo-hpa
+  annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "3"
 spec:
   scaleTargetRef:
     apiVersion: argoproj.io/v1alpha1
@@ -69,6 +78,9 @@ spec:
 
 kind: AnalysisTemplate
 apiVersion: argoproj.io/v1alpha1
+annotations:
+    argocd.argoproj.io/hook: Sync
+    argocd.argoproj.io/sync-wave: "0"
 metadata:
   name: canary-check
 spec:
