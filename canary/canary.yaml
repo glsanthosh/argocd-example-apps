@@ -80,7 +80,7 @@ kind: AnalysisTemplate
 apiVersion: argoproj.io/v1alpha1
 annotations:
     argocd.argoproj.io/hook: Sync
-    argocd.argoproj.io/sync-wave: "5"
+    argocd.argoproj.io/sync-wave: "0"
 metadata:
   name: canary-check
 spec:
